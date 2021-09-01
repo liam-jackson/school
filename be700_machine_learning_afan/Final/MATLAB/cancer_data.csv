@@ -1,0 +1,13 @@
+shape,radius,concavity,texture,color,class
+circle,large,convex,smooth,dark,1
+circle,large,concave,smooth,dark,1
+circle,large,flat,smooth,red,1
+irregular,small,concave,rough,dark,1
+circle,large,flat,rough,neutral,1
+circle,large,concave,rough,dark,1
+circle,large,convex,smooth,neutral,0
+irregular,large,concave,smooth,red,0
+triangle,small,convex,rough,dark,0
+circle,large,flat,smooth,neutral,0
+irregular,large,concave,smooth,dark,0
+irregular,large,concave,smooth,red,0

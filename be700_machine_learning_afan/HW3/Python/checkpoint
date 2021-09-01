@@ -1,0 +1,2 @@
+model_checkpoint_path: "101_epochs_0.05_learn_rate"
+all_model_checkpoint_paths: "101_epochs_0.05_learn_rate"

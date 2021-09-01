@@ -1,0 +1,13 @@
+﻿Instance,Shape,Radius,Concavity,Texture,Color,Class
+1,Circle,Large,Convex,Smooth,Dark,Malignant
+2,Circle,Large,Concave,Smooth,Dark,Malignant
+3,Circle,Large,Flat,Smooth,Red,Malignant
+4,,Small,Concave,Rough,Dark,Malignant
+5,Circle,Large,Flat,Rough,Neutral,Malignant
+,Circle,Large,Concave,Rough,Dark,Malignant
+7,Circle,Large,Convex,Smooth,Neutral,Benign
+8,,Large,Concave,Smooth,Red,Benign
+9,Triangle,Small,Convex,Rough,Dark,Benign
+,Circle,Large,Flat,Smooth,Neutral,Benign
+11,,Large,Concave,Smooth,Dark,Benign
+12,,Large,Concave,Smooth,Red,Benign

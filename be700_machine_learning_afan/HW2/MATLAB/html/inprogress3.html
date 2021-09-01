@@ -1,0 +1,415 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>inprogress3</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-03-26"><meta name="DC.source" content="inprogress3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Part A</a></li><li><a href="#3">Part B</a></li><li><a href="#4">Gaussian Mixtures</a></li><li><a href="#5">Setosa</a></li><li><a href="#6">Versicolor</a></li><li><a href="#7">Virginica</a></li><li><a href="#8">Plotting</a></li><li><a href="#9">Part C</a></li><li><a href="#10">Setosa</a></li><li><a href="#11">Versicolor</a></li><li><a href="#12">Virginica</a></li><li><a href="#13">Combined</a></li><li><a href="#14">Functions</a></li></ul></div><pre class="codeinput">clear <span class="string">all</span>; close <span class="string">all</span>; clc;
+</pre><h2 id="2">Part A</h2><pre class="codeinput">opts = detectImportOptions(<span class="string">'Iris_dataset.csv'</span>, <span class="string">'NumHeaderLines'</span>, 1);
+<span class="comment">% preview('Iris_dataset.csv', opts)</span>
+A = readtable(<span class="string">'Iris_dataset.csv'</span>, <span class="string">'NumHeaderLines'</span>, 1);
+</pre><h2 id="3">Part B</h2><pre class="codeinput"><span class="keyword">for</span> var_ct = 1:length(table2array(A(1,1:end-1)))
+    B(:,var_ct) = eval([<span class="string">'A.Var'</span> num2str(var_ct)]);
+<span class="keyword">end</span>
+
+species = unique(eval([<span class="string">'A.Var'</span> num2str(var_ct+1)]));
+species_instances = eval([<span class="string">'A.Var'</span> num2str(var_ct+1)]);
+<span class="keyword">for</span> instance = 1:length(species_instances)
+    onehot_spec = find(string(species_instances{instance}) == species);
+    B(instance,var_ct+1) = onehot_spec;
+<span class="keyword">end</span>
+
+seto_inds = find(B(:,end) == find(strcmp(string(species), <span class="string">'Iris-setosa'</span>)));
+vers_inds = find(B(:,end) == find(strcmp(string(species), <span class="string">'Iris-versicolor'</span>)));
+virg_inds = find(B(:,end) == find(strcmp(string(species), <span class="string">'Iris-virginica'</span>)));
+
+plot_switch = 0;
+
+xmin = 0;
+xmax = 10;
+ymin = 0;
+ymax = 10;
+
+figure();
+scatter(B(seto_inds, 1), B(seto_inds, 4), <span class="string">'red'</span>);
+hold <span class="string">on</span>;
+scatter(B(vers_inds, 1), B(vers_inds, 4), <span class="string">'yellow'</span>);
+scatter(B(virg_inds, 1), B(virg_inds, 4), <span class="string">'green'</span>);
+title(<span class="string">'Iris Data'</span>)
+xlabel(<span class="string">'Sepal Length'</span>)
+ylabel(<span class="string">'Petal Width'</span>)
+
+axis([xmin xmax ymin ymax]);
+legend({<span class="string">'Setosa'</span>,<span class="string">'Versicolor'</span>,<span class="string">'Virginica'</span>})
+hold <span class="string">off</span>;
+</pre><h2 id="4">Gaussian Mixtures</h2><pre class="codeinput">sig1 = 0.2;
+sig2 = sig1;
+
+seto_total = length(seto_inds);
+vers_total = length(vers_inds);
+virg_total = length(virg_inds);
+spec_total = length(B(:,end));
+
+x1 = xmin: 0.1 :xmax;
+x4 = ymin: 0.1 :ymax;
+
+[X1, X4] = meshgrid(x1, x4);
+</pre><h2 id="5">Setosa</h2><pre class="codeinput">p_seto = seto_total/spec_total;
+
+p_x1_giv_seto = p_x_giv_c(X1, B(seto_inds,1), sig1);
+p_x4_giv_seto = p_x_giv_c(X4, B(seto_inds,4), sig2);
+
+p_seto_giv_x = p_x1_giv_seto .* p_x4_giv_seto .* p_seto;
+</pre><h2 id="6">Versicolor</h2><pre class="codeinput">p_vers = vers_total/spec_total;
+
+p_x1_giv_vers = p_x_giv_c(X1, B(vers_inds,1), sig1);
+p_x4_giv_vers = p_x_giv_c(X4, B(vers_inds,4), sig2);
+
+p_vers_giv_x = p_x1_giv_vers .* p_x4_giv_vers .* p_vers;
+</pre><h2 id="7">Virginica</h2><pre class="codeinput">p_virg = virg_total/spec_total;
+
+p_x1_giv_virg = p_x_giv_c(X1, B(virg_inds,1), sig1);
+p_x4_giv_virg = p_x_giv_c(X4, B(virg_inds,4), sig2);
+
+p_virg_giv_x = p_x1_giv_virg .* p_x4_giv_virg .* p_virg;
+</pre><h2 id="8">Plotting</h2><pre class="codeinput">figure();
+surf(X1,X4,p_seto_giv_x, <span class="string">'EdgeAlpha'</span>, 0, <span class="string">'FaceAlpha'</span>, .2); hold <span class="string">on</span>;
+surf(X1,X4,p_vers_giv_x, <span class="string">'EdgeAlpha'</span>, 0, <span class="string">'FaceAlpha'</span>, .2);
+surf(X1,X4,p_virg_giv_x, <span class="string">'EdgeAlpha'</span>, 0, <span class="string">'FaceAlpha'</span>, .2);
+
+scatter(B(seto_inds, 1), B(seto_inds, 4), <span class="string">'red'</span>);
+scatter(B(vers_inds, 1), B(vers_inds, 4), <span class="string">'yellow'</span>);
+scatter(B(virg_inds, 1), B(virg_inds, 4), <span class="string">'green'</span>);
+
+title(<span class="string">'Surface of Gaussian Mixture'</span>)
+xlabel(<span class="string">'Sepal Length'</span>)
+ylabel(<span class="string">'Petal Width'</span>)
+hold <span class="string">off</span>;
+
+figure();
+hold <span class="string">on</span>;
+contour_levels = [0:0.03:0.15];
+
+contour(X1, X4, p_seto_giv_x, contour_levels, <span class="string">'red'</span>);
+contour(X1, X4, p_vers_giv_x, contour_levels, <span class="string">'yellow'</span>);
+contour(X1, X4, p_virg_giv_x, contour_levels, <span class="string">'green'</span>);
+
+scatter(B(seto_inds, 1), B(seto_inds, 4), <span class="string">'red'</span>);
+scatter(B(vers_inds, 1), B(vers_inds, 4), <span class="string">'yellow'</span>);
+scatter(B(virg_inds, 1), B(virg_inds, 4), <span class="string">'green'</span>);
+
+title(<span class="string">'Contours of Gaussian Mixture'</span>)
+xlabel(<span class="string">'Sepal Length'</span>)
+ylabel(<span class="string">'Petal Width'</span>)
+axis <span class="string">square</span>
+</pre><h2 id="9">Part C</h2><pre class="codeinput">new_data_x1 = [5.5; 7; 6.5; 6.2];
+new_data_x4 = [0.5; 1.8; 1.5; 1.7];
+
+new_data_probs = zeros([length(new_data_x1), length(species)]);
+
+clrs=[<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'m'</span>,<span class="string">'k'</span>];
+<span class="keyword">for</span> new_sample_num = 1:length(new_data_x1)
+    sample_x1 = new_data_x1(new_sample_num);
+    sample_x4 = new_data_x4(new_sample_num);
+</pre><h2 id="10">Setosa</h2><pre class="codeinput">    p_x1_giv_seto_sample = p_x_giv_c(sample_x1, B(seto_inds,1), sig1);
+    p_x4_giv_seto_sample = p_x_giv_c(sample_x4, B(seto_inds,4), sig2);
+</pre><h2 id="11">Versicolor</h2><pre class="codeinput">    p_x1_giv_vers_sample = p_x_giv_c(sample_x1, B(vers_inds,1), sig1);
+    p_x4_giv_vers_sample = p_x_giv_c(sample_x4, B(vers_inds,4), sig2);
+</pre><h2 id="12">Virginica</h2><pre class="codeinput">    p_x1_giv_virg_sample = p_x_giv_c(sample_x1, B(virg_inds,1), sig1);
+    p_x4_giv_virg_sample = p_x_giv_c(sample_x4, B(virg_inds,4), sig2);
+</pre><h2 id="13">Combined</h2><pre class="codeinput">    p_seto_giv_x_sample = p_x1_giv_seto_sample .* p_x4_giv_seto_sample .* p_seto;
+    p_vers_giv_x_sample = p_x1_giv_vers_sample .* p_x4_giv_vers_sample .* p_vers;
+    p_virg_giv_x_sample = p_x1_giv_virg_sample .* p_x4_giv_virg_sample .* p_virg;
+
+    new_data_probs(new_sample_num, :) = [p_seto_giv_x_sample, p_vers_giv_x_sample, p_virg_giv_x_sample];
+
+    pt_color = clrs(new_sample_num);
+    scatter(sample_x1, sample_x4, 50, pt_color, <span class="string">'^'</span>,<span class="string">'filled'</span>)
+<span class="keyword">end</span>
+
+legend({<span class="string">'Setosa Gaussian Contour'</span>,<span class="string">'Versicolor Gaussian Contour'</span>,<span class="keyword">...</span>
+    <span class="string">'Virginica Gaussian Contour'</span>,<span class="string">'Setosa pts'</span>,<span class="string">'Versicolor pts'</span>,<span class="keyword">...</span>
+    <span class="string">'Virginica pts'</span>,<span class="string">'Sample 1'</span>,<span class="string">'Sample 2'</span>,<span class="string">'Sample 3'</span>,<span class="string">'Sample 4'</span>},<span class="keyword">...</span>
+    <span class="string">'location'</span>,<span class="string">'best'</span>,<span class="string">'NumColumns'</span>,3)
+<span class="comment">% legend('boxoff');</span>
+legend(<span class="string">'Orientation'</span>,<span class="string">'horizontal'</span>)
+hold <span class="string">off</span>;
+
+[m, index] = max(new_data_probs, [], 2);
+
+<span class="keyword">for</span> sample_num = 1:length(new_data_probs(:,1))
+    formatSpec = <span class="string">'With a probability of %0.3f, Sample %d is most likely %s'</span>;
+    prob_ans = m(sample_num);
+    class_ans = string(species{index(sample_num)});
+    str = sprintf(formatSpec, prob_ans, sample_num, class_ans);
+    disp(str)
+<span class="keyword">end</span>
+</pre><h2 id="14">Functions</h2><pre class="codeinput"><span class="keyword">function</span> p = p_x_giv_c(att_mesh, att_vals, sigma)
+
+k = 1/(sigma*sqrt(2*pi));
+m = length(att_vals);
+p = 0;
+
+<span class="keyword">for</span> instance = 1:length(att_vals)
+    p = p + exp((-1/(2*(sigma^2))).*(att_mesh - att_vals(instance)).^2);
+<span class="keyword">end</span>
+
+p = p*k/m;
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">With a probability of 0.130, Sample 1 is most likely Iris-setosa
+With a probability of 0.114, Sample 2 is most likely Iris-virginica
+With a probability of 0.160, Sample 3 is most likely Iris-versicolor
+With a probability of 0.159, Sample 4 is most likely Iris-virginica
+</pre><img vspace="5" hspace="5" src="inprogress3_01.png" alt=""> <img vspace="5" hspace="5" src="inprogress3_02.png" alt=""> <img vspace="5" hspace="5" src="inprogress3_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clear all; close all; clc;
+
+%%% Part A
+opts = detectImportOptions('Iris_dataset.csv', 'NumHeaderLines', 1);
+% preview('Iris_dataset.csv', opts)
+A = readtable('Iris_dataset.csv', 'NumHeaderLines', 1);
+
+%%% Part B
+
+for var_ct = 1:length(table2array(A(1,1:end-1)))    
+    B(:,var_ct) = eval(['A.Var' num2str(var_ct)]);
+end
+
+species = unique(eval(['A.Var' num2str(var_ct+1)]));
+species_instances = eval(['A.Var' num2str(var_ct+1)]);
+for instance = 1:length(species_instances)
+    onehot_spec = find(string(species_instances{instance}) == species);
+    B(instance,var_ct+1) = onehot_spec;
+end
+
+seto_inds = find(B(:,end) == find(strcmp(string(species), 'Iris-setosa')));
+vers_inds = find(B(:,end) == find(strcmp(string(species), 'Iris-versicolor')));
+virg_inds = find(B(:,end) == find(strcmp(string(species), 'Iris-virginica')));
+
+plot_switch = 0;
+
+xmin = 0;
+xmax = 10;
+ymin = 0;
+ymax = 10;
+
+figure();
+scatter(B(seto_inds, 1), B(seto_inds, 4), 'red'); 
+hold on;
+scatter(B(vers_inds, 1), B(vers_inds, 4), 'yellow'); 
+scatter(B(virg_inds, 1), B(virg_inds, 4), 'green'); 
+title('Iris Data')
+xlabel('Sepal Length')
+ylabel('Petal Width')
+
+axis([xmin xmax ymin ymax]);
+legend({'Setosa','Versicolor','Virginica'})
+hold off;
+
+%%% Gaussian Mixtures
+
+sig1 = 0.2;
+sig2 = sig1;
+
+seto_total = length(seto_inds);
+vers_total = length(vers_inds);
+virg_total = length(virg_inds);
+spec_total = length(B(:,end));
+
+x1 = xmin: 0.1 :xmax;
+x4 = ymin: 0.1 :ymax;
+
+[X1, X4] = meshgrid(x1, x4);
+
+%%% Setosa
+p_seto = seto_total/spec_total;
+
+p_x1_giv_seto = p_x_giv_c(X1, B(seto_inds,1), sig1);
+p_x4_giv_seto = p_x_giv_c(X4, B(seto_inds,4), sig2);
+
+p_seto_giv_x = p_x1_giv_seto .* p_x4_giv_seto .* p_seto;
+
+%%% Versicolor
+p_vers = vers_total/spec_total;
+
+p_x1_giv_vers = p_x_giv_c(X1, B(vers_inds,1), sig1);
+p_x4_giv_vers = p_x_giv_c(X4, B(vers_inds,4), sig2);
+
+p_vers_giv_x = p_x1_giv_vers .* p_x4_giv_vers .* p_vers;
+
+%%% Virginica
+p_virg = virg_total/spec_total;
+
+p_x1_giv_virg = p_x_giv_c(X1, B(virg_inds,1), sig1);
+p_x4_giv_virg = p_x_giv_c(X4, B(virg_inds,4), sig2);
+
+p_virg_giv_x = p_x1_giv_virg .* p_x4_giv_virg .* p_virg;
+
+%%% Plotting
+
+figure();
+surf(X1,X4,p_seto_giv_x, 'EdgeAlpha', 0, 'FaceAlpha', .2); hold on;
+surf(X1,X4,p_vers_giv_x, 'EdgeAlpha', 0, 'FaceAlpha', .2);
+surf(X1,X4,p_virg_giv_x, 'EdgeAlpha', 0, 'FaceAlpha', .2);
+
+scatter(B(seto_inds, 1), B(seto_inds, 4), 'red'); 
+scatter(B(vers_inds, 1), B(vers_inds, 4), 'yellow');
+scatter(B(virg_inds, 1), B(virg_inds, 4), 'green');
+
+title('Surface of Gaussian Mixture')
+xlabel('Sepal Length')
+ylabel('Petal Width')
+hold off;
+
+figure();
+hold on;
+contour_levels = [0:0.03:0.15];
+
+contour(X1, X4, p_seto_giv_x, contour_levels, 'red');
+contour(X1, X4, p_vers_giv_x, contour_levels, 'yellow');
+contour(X1, X4, p_virg_giv_x, contour_levels, 'green'); 
+
+scatter(B(seto_inds, 1), B(seto_inds, 4), 'red'); 
+scatter(B(vers_inds, 1), B(vers_inds, 4), 'yellow');
+scatter(B(virg_inds, 1), B(virg_inds, 4), 'green');
+
+title('Contours of Gaussian Mixture')
+xlabel('Sepal Length')
+ylabel('Petal Width')
+axis square
+
+%%% Part C
+
+new_data_x1 = [5.5; 7; 6.5; 6.2];
+new_data_x4 = [0.5; 1.8; 1.5; 1.7];
+
+new_data_probs = zeros([length(new_data_x1), length(species)]);
+
+clrs=['b','c','m','k'];
+for new_sample_num = 1:length(new_data_x1)
+    sample_x1 = new_data_x1(new_sample_num);
+    sample_x4 = new_data_x4(new_sample_num);
+    
+    %%% Setosa
+    p_x1_giv_seto_sample = p_x_giv_c(sample_x1, B(seto_inds,1), sig1);
+    p_x4_giv_seto_sample = p_x_giv_c(sample_x4, B(seto_inds,4), sig2);
+
+    %%% Versicolor
+    p_x1_giv_vers_sample = p_x_giv_c(sample_x1, B(vers_inds,1), sig1);
+    p_x4_giv_vers_sample = p_x_giv_c(sample_x4, B(vers_inds,4), sig2);
+
+    %%% Virginica
+    p_x1_giv_virg_sample = p_x_giv_c(sample_x1, B(virg_inds,1), sig1);
+    p_x4_giv_virg_sample = p_x_giv_c(sample_x4, B(virg_inds,4), sig2);
+
+    %%% Combined
+    p_seto_giv_x_sample = p_x1_giv_seto_sample .* p_x4_giv_seto_sample .* p_seto;
+    p_vers_giv_x_sample = p_x1_giv_vers_sample .* p_x4_giv_vers_sample .* p_vers;
+    p_virg_giv_x_sample = p_x1_giv_virg_sample .* p_x4_giv_virg_sample .* p_virg;
+    
+    new_data_probs(new_sample_num, :) = [p_seto_giv_x_sample, p_vers_giv_x_sample, p_virg_giv_x_sample];
+    
+    pt_color = clrs(new_sample_num);
+    scatter(sample_x1, sample_x4, 50, pt_color, '^','filled')
+end
+
+legend({'Setosa Gaussian Contour','Versicolor Gaussian Contour',...
+    'Virginica Gaussian Contour','Setosa pts','Versicolor pts',...
+    'Virginica pts','Sample 1','Sample 2','Sample 3','Sample 4'},...
+    'location','best','NumColumns',3)
+% legend('boxoff');
+legend('Orientation','horizontal')
+hold off;
+
+[m, index] = max(new_data_probs, [], 2);
+
+for sample_num = 1:length(new_data_probs(:,1))
+    formatSpec = 'With a probability of %0.3f, Sample %d is most likely %s';
+    prob_ans = m(sample_num);
+    class_ans = string(species{index(sample_num)});
+    str = sprintf(formatSpec, prob_ans, sample_num, class_ans);
+    disp(str) 
+end
+
+%%% Functions
+
+function p = p_x_giv_c(att_mesh, att_vals, sigma)
+
+k = 1/(sigma*sqrt(2*pi));
+m = length(att_vals);
+p = 0;
+
+for instance = 1:length(att_vals)
+    p = p + exp((-1/(2*(sigma^2))).*(att_mesh - att_vals(instance)).^2);    
+end
+
+p = p*k/m;
+
+end
+
+##### SOURCE END #####
+--></body></html>

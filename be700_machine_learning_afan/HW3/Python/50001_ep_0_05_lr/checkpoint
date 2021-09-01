@@ -1,0 +1,3 @@
+model_checkpoint_path: "trained_model.cpkt"
+all_model_checkpoint_paths: "../10001_ep_0_05_lr/trained_model.cpkt"
+all_model_checkpoint_paths: "trained_model.cpkt"

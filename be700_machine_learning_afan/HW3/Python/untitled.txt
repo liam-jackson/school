@@ -1,0 +1,18 @@
+train_labels_ohenc = np.zeros([10, len(train_labels)])
+for inst in range(len(train_labels)):
+    train_labels_ohenc_idx = train_labels[inst] 
+    train_labels_ohenc[train_labels_ohenc_idx, inst] = 1
+        
+test_labels_ohenc = np.zeros([10, len(test_labels)])
+for inst in range(len(test_labels)):
+    test_labels_ohenc_idx = test_labels[inst] 
+    test_labels_ohenc[test_labels_ohenc_idx, inst] = 1
+    
+print(f'The shape of the one-hot encoded training labels array is: {train_labels_ohenc.shape}')    
+print(f'The shape of the one-hot encoded testing labels array is: {test_labels_ohenc.shape}')    
+
+print(f'\nThe first training label is: {train_labels[0]}')
+print(f'The associated vector is: {np.asarray(train_labels_ohenc[:,0])}')
+
+print(f'\nThe first test label is: {test_labels[0]}')
+print(f'The associated vector is: {np.asarray(test_labels_ohenc[:,0])}')
